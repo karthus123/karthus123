@@ -1,0 +1,100 @@
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        int[,] tabuleiro = new int[3, 3];
+
+        // Inicializa o tabuleiro com zeros
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                tabuleiro[i, j] = 0;
+            }
+        }
+
+        // Exibe o tabuleiro inicial
+        ImprimirTabuleiro(tabuleiro);
+
+        // Variável para alternar entre 1 e 2 (jogador 1 e jogador 2)
+        int jogador = 1;
+
+        // Loop do jogo
+        for (int jogadas = 0; jogadas < 9; jogadas++)
+        {
+            Console.WriteLine($"Vez do jogador '{jogador}'");
+            Console.Write("Digite a linha (0-2): ");
+            int linha = int.Parse(Console.ReadLine());
+            Console.Write("Digite a coluna (0-2): ");
+            int coluna = int.Parse(Console.ReadLine());
+
+            // Verifica se a posição está ocupada
+            if (tabuleiro[linha, coluna] == 0)
+            {
+                tabuleiro[linha, coluna] = jogador;
+                ImprimirTabuleiro(tabuleiro);
+
+                // Verifica se houve vencedor
+                if (VerificarVencedor(tabuleiro, jogador))
+                {
+                    Console.WriteLine($"Jogador '{jogador}' venceu!");
+                    return;
+                }
+
+                // Alterna entre 1 e 2
+                jogador = (jogador == 1) ? 2 : 1;
+            }
+            else
+            {
+                Console.WriteLine("Posição já ocupada! Tente novamente.");
+                jogadas--;
+            }
+        }
+
+        Console.WriteLine("Empate!");
+    }
+
+    // Método para verificar se houve um vencedor
+    static bool VerificarVencedor(int[,] tabuleiro, int jogador)
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            // Verifica linhas e colunas
+            if ((tabuleiro[i, 0] == jogador) && (tabuleiro[i, 1] == jogador) && (tabuleiro[i, 2] == jogador))
+                return true;
+
+            if ((tabuleiro[0, i] == jogador) && (tabuleiro[1, i] == jogador) && (tabuleiro[2, i] == jogador))
+                return true;
+        }
+
+        // Verifica diagonais
+        if ((tabuleiro[0, 0] == jogador) && (tabuleiro[1, 1] == jogador) && (tabuleiro[2, 2] == jogador))
+            return true;
+
+        if ((tabuleiro[0, 2] == jogador) && (tabuleiro[1, 1] == jogador) && (tabuleiro[2, 0] == jogador))
+            return true;
+
+        return false;
+    }
+
+    // Método para imprimir o tabuleiro
+    static void ImprimirTabuleiro(int[,] tabuleiro)
+    {
+        Console.WriteLine("-------------");
+        for (int i = 0; i < 3; i++)
+        {
+            Console.Write("| ");
+            for (int j = 0; j < 3; j++)
+            {
+                if (tabuleiro[i, j] == 0)
+                    Console.Write("  ");
+                else
+                    Console.Write(tabuleiro[i, j] + " ");
+            }
+            Console.WriteLine("|");
+        }
+        Console.WriteLine("-------------");
+    }
+}
